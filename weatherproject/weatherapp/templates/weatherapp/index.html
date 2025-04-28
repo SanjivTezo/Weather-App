@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    {% load static %}  <!-- This line is needed to load static files -->
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body
+
+    {%if exception_occurred %}
+        style="background-image: url('https://images.pexels.com/photos/3008509/pexels-photo-3008509.jpeg?auto=compress&cs=tinysrgb&w=1600');" 
+        {% else %}
+        style="background-image: url('{{ image_url }}');"
+        {% endif %} >
+    <div class="container">
+        <h1 class="title">Weather App</h1>
+        
+        <form method="post" class="weather-form">
+            {% csrf_token %}
+            <label for="city" class="city-label">Enter City:</label>
+            <input type="text" id="city" name="city" class="city-input" required placeholder="e.g. Pune">
+            <button type="submit" class="submit-btn">Get Weather</button>
+        </form>
+
+        {% if temp %}
+            <div class="weather-info">
+                <h2 class="temperature">{{ temp }} °C</h2>
+                <h3 class="city-name">{{ city }}</h3>
+                <h3 class="weather-description">{{ description }}</h3>
+                <img src="https://openweathermap.org/img/w/{{ icon }}.png" alt="Weather Icon" class="weather-icon">
+                <p class="date">{{ day }}</p>
+            </div>
+        {% endif %}
+    </div>
+{% if exception_occurred %}
+    <script>    
+        window.onload=function() {
+            alert("City not found. Please enter a valid city name.");
+        }   
+    </script>
+{% endif %}
+<script>
+    // Log the image_url value to the console for debugging
+    console.log("Image URL: {{ image_url }}");
+</script>
+</body>
+</html>
